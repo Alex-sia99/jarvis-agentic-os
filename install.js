@@ -52,6 +52,7 @@ if (REMOVE) {
   let n = 0;
   const s2 = server
     .replace(/^const jarvisRoutes = require\("\.\/lib\/jarvis-routes"\);\r?\n/m, () => { n++; return ""; })
+    .replace(/^[ \t]*\/\/ ===== JARVIS \(routes dans lib\/jarvis-routes\.js\) =====\r?\n/m, () => { n++; return ""; })
     .replace(/^[ \t]*if \(await jarvisRoutes\.handle\(\{ req, res, url, p, json, readBody \}\)\) return;\r?\n/m, () => { n++; return ""; });
   const h2 = html
     .replace(/[ \t]*<link rel="stylesheet" href="jarvis\.css" \/>\r?\n/, () => { n++; return ""; })
@@ -99,10 +100,8 @@ if (!/require\("\.\/lib\/jarvis-routes"\)/.test(server)) {
 if (!/jarvisRoutes\.handle\(/.test(server)) {
   const anchor = server.search(/^[ \t]*if \(p === "\/api\/health"\)/m);
   if (anchor < 0) { console.error("✗ server.js : route /api/health introuvable (point d'insertion des routes Jarvis). Voir docs/INSTALL.md."); process.exit(1); }
-  const indent = (server.slice(0, anchor).match(/[ \t]*$/) || [""])[0];
-  const lineStart = server.lastIndexOf("\n", anchor) + 1;
-  const ind = server.slice(lineStart, anchor + indent.length).match(/^[ \t]*/)[0];
-  server = server.slice(0, lineStart) + `${ind}// ===== JARVIS (routes dans lib/jarvis-routes.js) =====\n${ind}if (await jarvisRoutes.handle({ req, res, url, p, json, readBody })) return;\n` + server.slice(lineStart);
+  const ind = server.slice(anchor).match(/^[ \t]*/)[0];
+  server = server.slice(0, anchor) + `${ind}// ===== JARVIS (routes dans lib/jarvis-routes.js) =====\n${ind}if (await jarvisRoutes.handle({ req, res, url, p, json, readBody })) return;\n` + server.slice(anchor);
   log("+ server.js : hook des routes Jarvis avant /api/health");
 } else log("= server.js : hook des routes déjà présent");
 if (server !== read(serverFile)) write(serverFile, server);
