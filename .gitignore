@@ -1,0 +1,6 @@
+node_modules/
+*.bak-jarvis
+.env
+*.log
+data/
+__pycache__/
