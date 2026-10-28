@@ -51,9 +51,9 @@ let html = read(htmlFile);
 if (REMOVE) {
   let n = 0;
   const s2 = server
-    .replace(/^const jarvisRoutes = require\("\.\/lib\/jarvis-routes"\);\r?\n/m, () => { n++; return ""; })
-    .replace(/^[ \t]*\/\/ ===== JARVIS \(routes dans lib\/jarvis-routes\.js\) =====\r?\n/m, () => { n++; return ""; })
-    .replace(/^[ \t]*if \(await jarvisRoutes\.handle\(\{ req, res, url, p, json, readBody \}\)\) return;\r?\n/m, () => { n++; return ""; });
+    .replace(/^const jarvisRoutes = require\("\.\/lib\/jarvis-routes"\);\r?\n/mg, () => { n++; return ""; })
+    .replace(/^[ \t]*\/\/ ===== JARVIS \(routes dans lib\/jarvis-routes\.js\) =====\r?\n/mg, () => { n++; return ""; })
+    .replace(/^[ \t]*if \(await jarvisRoutes\.handle\(\{ req, res, url, p, json, readBody \}\)\) return;\r?\n/mg, () => { n++; return ""; });
   const h2 = html
     .replace(/[ \t]*<link rel="stylesheet" href="jarvis\.css" \/>\r?\n/, () => { n++; return ""; })
     .replace(/[ \t]*<button class="btn btn-ghost btn-jarvis" id="btn-jarvis"[^\n]*\n/, () => { n++; return ""; })
